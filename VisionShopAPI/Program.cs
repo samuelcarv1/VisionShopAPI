@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using VisionShopAPI.Data;
+using VisionShopAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddDbContext<VisionShopContext>(options => options.UseMySql(con
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<OculosService>();
 // Add services to the container.
 
 builder.Services.AddControllers();

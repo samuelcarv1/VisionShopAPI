@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using VisionShopAPI.Data;
 using VisionShopAPI.Data.Dtos;
 using VisionShopAPI.Models;
+using VisionShopAPI.Services;
 
 namespace VisionShopAPI.Controllers
 {
@@ -13,13 +14,11 @@ namespace VisionShopAPI.Controllers
     [Route("[Controller]")]
     public class ClienteController : ControllerBase
     {
-        private VisionShopContext _context;
-        private IMapper _mapper;
+        private ClienteService _clienteService;
 
-        public ClienteController(VisionShopContext context, IMapper mapper)
+        public ClienteController(ClienteService clienteService)
         {
-            _context = context;
-            _mapper = mapper;
+            _clienteService = clienteService;
         }
 
         [HttpPost]
@@ -27,33 +26,24 @@ namespace VisionShopAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var cliente = _mapper.Map<Cliente>(dto);
-            _context.Clientes.Add(cliente);
-            _context.SaveChanges();
-
-            var readDto = _mapper.Map<ReadClienteDto>(cliente);
-
-            return CreatedAtAction(nameof(ObterPorId), new { id = cliente.Id }, readDto);
+            var cliente = _clienteService.CriarCliente(dto);
+            return CreatedAtAction(nameof(ObterPorId), new { id = cliente.Id }, cliente);
         }
 
         [HttpGet("{id}")]
         public IActionResult ObterPorId(int id)
         {
-            var cliente = _context.Clientes.Find(id);
+            var cliente = _clienteService.ObterPorId(id);
 
-            if (cliente == null) return NotFound("Cliente não encontrado.");
+            if(cliente == null) return NotFound();
 
-            var readDto = _mapper.Map<ReadClienteDto>(cliente);
-
-            return Ok(readDto);
+            return Ok(cliente);
         }
 
         [HttpGet]
         public IEnumerable<ReadClienteDto> ObterTodos()
         {
-            var clientes = _context.Clientes.ToList();
-
-            return _mapper.Map<List<ReadClienteDto>>(clientes);
+            return _clienteService.ObterTodos();
         }
     }
 }

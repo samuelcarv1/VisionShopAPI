@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using VisionShopAPI.Data;
 using VisionShopAPI.Data.Dtos;
 using VisionShopAPI.Models;
+using VisionShopAPI.Services;
 
 namespace VisionShopAPI.Controllers
 {
@@ -12,13 +13,11 @@ namespace VisionShopAPI.Controllers
     [Route("[Controller]")]
     public class OculosController : ControllerBase
     {
-        private VisionShopContext _context;
-        private IMapper _mapper;
+        private OculosService _oculosService;
 
-        public OculosController(VisionShopContext context, IMapper mapper)
+        public OculosController(OculosService oculosService)
         {
-            _context = context;
-            _mapper = mapper;
+            _oculosService = oculosService;
         }
 
         [HttpPost]
@@ -26,59 +25,53 @@ namespace VisionShopAPI.Controllers
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
 
-            var oculos = _mapper.Map<Oculos>(dto);
-            _context.Oculos.Add(oculos);
-            _context.SaveChanges();
+            var readOculos = _oculosService.CriarOculos(dto);
 
-            var readDto = _mapper.Map<ReadOculosDto>(oculos);
-
-            return CreatedAtAction(nameof(ObterPorId), new { id = oculos.Id }, readDto);
+            return CreatedAtAction(nameof(ObterPorId), new { id = readOculos.Id }, readOculos);
         }
 
         [HttpGet("{id}")]
         public IActionResult ObterPorId(int id)
         {
-            var oculos = _context.Oculos.Find(id);
+            var oculos = _oculosService.ObterPorId(id);
 
             if(oculos == null) return NotFound("Óculos não encontrado.");
 
-            var readDto = _mapper.Map<ReadOculosDto>(oculos);
-
-            return Ok(readDto);
+            return Ok(oculos);
         }
 
         [HttpGet]
         public IEnumerable<ReadOculosDto> ObterTodos()
         {
-            var oculos = _context.Oculos.ToList();
+            var oculos = _oculosService.ObterTodos();
 
-            return _mapper.Map<List<ReadOculosDto>>(oculos);
+            return oculos;
         }
 
-        [HttpPut("{id}")]
-        public IActionResult AtualizarOculos(int id, [FromBody] CreateOculosDto oculosDto)
-        {
-            var oculos = _context.Oculos.Find(id);
+        //[HttpPut("{id}")]
+        //public IActionResult AtualizarOculos(int id, [FromBody] CreateOculosDto oculosDto)
+        //{
+        //    var oculos = _context.Oculos.Find(id);
 
-            if (oculos == null) return NotFound("Óculos não encontrado.");
+        //    if (oculos == null) return NotFound("Óculos não encontrado.");
 
-            _mapper.Map(oculosDto, oculos);
-            _context.SaveChanges();
+        //    _mapper.Map(oculosDto, oculos);
+        //    _context.SaveChanges();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        [HttpDelete("{id}")]
-        public IActionResult DeletarOculos(int id)
-        {
-            var oculos = _context.Oculos.Find(id);
+        //[HttpDelete("{id}")]
+        //public IActionResult DeletarOculos(int id)
+        //{
+        //    var oculos = _context.Oculos.Find(id);
 
-            if (oculos == null) return NotFound("Óculos não encontrado.");
+        //    if (oculos == null) return NotFound("Óculos não encontrado.");
 
-            _context.Oculos.Remove(oculos);
-            _context.SaveChanges();
+        //    _context.Oculos.Remove(oculos);
+        //    _context.SaveChanges();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
     }
 }
