@@ -14,5 +14,9 @@ namespace VisionShopAPI.Data.Dtos
 
         [Required]
         public string Fabricante { get; set; }
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int Estoque { get; set; }
     }
 }

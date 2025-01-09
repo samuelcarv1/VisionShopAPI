@@ -12,5 +12,9 @@ namespace VisionShopAPI.Models
         public string Nome { get; set; }
         public string Fabricante { get; set; }
         public decimal Preco { get; set; }
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int Estoque { get; set; } // Adicionando controle de estoque
     }
 }

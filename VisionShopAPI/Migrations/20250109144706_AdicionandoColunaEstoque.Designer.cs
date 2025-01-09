@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VisionShopAPI.Data;
 
@@ -10,9 +11,10 @@ using VisionShopAPI.Data;
 namespace VisionShopAPI.Migrations
 {
     [DbContext(typeof(VisionShopContext))]
-    partial class VisionShopContextModelSnapshot : ModelSnapshot
+    [Migration("20250109144706_AdicionandoColunaEstoque")]
+    partial class AdicionandoColunaEstoque
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

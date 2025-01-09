@@ -13,6 +13,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<OculosService>();
+builder.Services.AddScoped<VendaService>();
+
 // Add services to the container.
 
 builder.Services.AddControllers();

@@ -1,4 +1,6 @@
-﻿namespace VisionShopAPI.Data.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace VisionShopAPI.Data.Dtos
 {
     public class ReadOculosDto
     {
@@ -6,5 +8,6 @@
         public string Nome { get; set; }
         public decimal Preco { get; set; }
         public string Fabricante { get; set; }
+        public int Estoque { get; set; }
     }
 }
