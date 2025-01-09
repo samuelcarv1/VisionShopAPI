@@ -52,7 +52,7 @@ namespace VisionShopAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Fabricante")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -61,9 +61,8 @@ namespace VisionShopAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 

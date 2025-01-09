@@ -10,8 +10,8 @@ using VisionShopAPI.Data;
 namespace VisionShopAPI.Migrations
 {
     [DbContext(typeof(VisionShopContext))]
-    [Migration("20250109015408_IniciandoCriaçãoDeTabela")]
-    partial class IniciandoCriaçãoDeTabela
+    [Migration("20250109121859_AdicionandoBancoNovamente")]
+    partial class AdicionandoBancoNovamente
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,7 +54,7 @@ namespace VisionShopAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Fabricante")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -63,9 +63,8 @@ namespace VisionShopAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
