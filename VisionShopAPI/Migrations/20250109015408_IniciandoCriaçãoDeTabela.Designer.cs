@@ -10,7 +10,7 @@ using VisionShopAPI.Data;
 namespace VisionShopAPI.Migrations
 {
     [DbContext(typeof(VisionShopContext))]
-    [Migration("20250109013419_IniciandoCriaçãoDeTabela")]
+    [Migration("20250109015408_IniciandoCriaçãoDeTabela")]
     partial class IniciandoCriaçãoDeTabela
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,11 +30,16 @@ namespace VisionShopAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Endereco")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Telefone")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -49,16 +54,18 @@ namespace VisionShopAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Fabricante")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<decimal>("Preco")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 

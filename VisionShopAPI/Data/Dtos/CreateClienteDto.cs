@@ -15,5 +15,9 @@ namespace VisionShopAPI.Data.Dtos
         [Required]
         [Phone(ErrorMessage = "Número de telefone inválido.")]
         public string Telefone { get; set; }
+
+        [Required]
+        [RegularExpression(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$", ErrorMessage = "O CPF deve estar no formato 000.000.000-00.")]
+        public string CPF { get; set; }
     }
 }
