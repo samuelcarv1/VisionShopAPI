@@ -1,16 +1,19 @@
 ﻿using System.Reflection.Emit;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using VisionShopAPI.Models;
 
 namespace VisionShopAPI.Data
 {
-    public class VisionShopContext : DbContext
+    public class VisionShopContext : IdentityDbContext<Usuario>
     {
         public VisionShopContext(DbContextOptions<VisionShopContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             // Relacionamento entre Venda e Cliente
             builder.Entity<Venda>()
                    .HasOne(v => v.Cliente)

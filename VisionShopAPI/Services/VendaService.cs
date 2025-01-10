@@ -17,17 +17,25 @@ namespace VisionShopAPI.Services
             _mapper = mapper;
         }
 
-        public bool RegistraVenda(CreateVendaDto dto)
+        public Dictionary<bool,string> RegistraVenda(CreateVendaDto dto)
         {
+            Dictionary<bool, string> mensagem = new Dictionary<bool, string>();
+
             var cliente = _context.Clientes.Find(dto.ClienteId);
-            if (cliente == null) return false;
+            if (cliente == null)
+            {
+                mensagem.Add(false, "Cliente não encontrado!");
+
+                return mensagem;
+            }
 
             foreach (var item in dto.Itens)
             {
                 var oculos = _context.Oculos.Find(item.OculosId);
                 if (oculos == null || oculos.Estoque < item.Quantidade)
                 {
-                    return false;
+                    mensagem.Add(false, "Óculos não encontrado ou não há estoque!");
+                    return mensagem;
                 }
             }
 
@@ -52,7 +60,9 @@ namespace VisionShopAPI.Services
             _context.Vendas.Add(venda);
             _context.SaveChanges();
 
-            return true;
+            mensagem.Add(true, "Venda registrada com sucesso.");
+
+            return mensagem;
         }
 
         public ReadVendaDto ObterVendaPorId(int id)

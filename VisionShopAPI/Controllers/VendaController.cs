@@ -20,10 +20,12 @@ namespace VisionShopAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var sucesso = _vendaService.RegistraVenda(dto);
-            if (!sucesso) return NotFound("Cliente não encontrado ou dados inválidos.");
+            var resultado = _vendaService.RegistraVenda(dto);
 
-            return Ok("Venda registrada com sucesso.");
+            if (resultado.ContainsKey(false))
+                return NotFound(resultado[false]);
+
+            return Ok(resultado[true]);
         }
 
         [HttpGet("{id}")]

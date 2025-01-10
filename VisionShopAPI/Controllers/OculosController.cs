@@ -8,9 +8,9 @@ using VisionShopAPI.Services;
 
 namespace VisionShopAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
-    [Route("[Controller]")]
+    [Route("api/[controller]")]
     public class OculosController : ControllerBase
     {
         private OculosService _oculosService;
@@ -39,7 +39,6 @@ namespace VisionShopAPI.Controllers
 
             return Ok(oculos);
         }
-
         [HttpGet]
         public IEnumerable<ReadOculosDto> ObterTodos()
         {
