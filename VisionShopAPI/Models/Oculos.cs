@@ -15,6 +15,8 @@ namespace VisionShopAPI.Models
 
         [Required]
         [Range(0, int.MaxValue)]
-        public int Estoque { get; set; } // Adicionando controle de estoque
+        public int Estoque { get; set; }
+
+        public ICollection<MovimentacaoEstoque> MovimentacoesEstoque { get; set; }
     }
 }

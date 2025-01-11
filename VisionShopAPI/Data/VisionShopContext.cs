@@ -31,11 +31,19 @@ namespace VisionShopAPI.Data
                    .HasOne(iv => iv.Oculos)
                    .WithMany()
                    .HasForeignKey(iv => iv.OculosId);
+
+            //Relacionamento
+            builder.Entity<MovimentacaoEstoque>()
+                .HasOne(m => m.Oculos)
+                .WithMany(o => o.MovimentacoesEstoque)
+                .HasForeignKey(m => m.OculosId);
         }
 
         public DbSet<Oculos> Oculos { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Venda> Vendas { get; set; }
         public DbSet<ItemVenda> ItensVenda { get; set; }
+
+        public DbSet<MovimentacaoEstoque> MovimentacaoEstoques { get; set; }
     }
 }

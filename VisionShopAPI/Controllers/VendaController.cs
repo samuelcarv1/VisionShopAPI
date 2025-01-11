@@ -16,11 +16,11 @@ namespace VisionShopAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegistrarVenda([FromBody] CreateVendaDto dto)
+        public async Task<IActionResult> RegistrarVendaAsync([FromBody] CreateVendaDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var resultado = _vendaService.RegistraVenda(dto);
+            var resultado = await _vendaService.RegistraVendaAsync(dto);
 
             if (resultado.ContainsKey(false))
                 return NotFound(resultado[false]);

@@ -23,6 +23,7 @@ builder.Services.AddScoped<OculosService>();
 builder.Services.AddScoped<VendaService>();
 builder.Services.AddScoped<AutenticacaoService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<MovimentacaoEstoqueService>();
 
 builder.Services.AddIdentity<Usuario, IdentityRole>()
     .AddEntityFrameworkStores<VisionShopContext>()
@@ -72,8 +73,13 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.MaxDepth = 64;
+        });
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();

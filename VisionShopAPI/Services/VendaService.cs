@@ -10,22 +10,23 @@ namespace VisionShopAPI.Services
     {
         private VisionShopContext _context;
         private IMapper _mapper;
+        private MovimentacaoEstoqueService _movimentacaoEstoqueService;
 
-        public VendaService(VisionShopContext context, IMapper mapper)
+        public VendaService(VisionShopContext context, IMapper mapper, MovimentacaoEstoqueService movimentacaoEstoqueService)
         {
             _context = context;
             _mapper = mapper;
+            _movimentacaoEstoqueService = movimentacaoEstoqueService;
         }
 
-        public Dictionary<bool,string> RegistraVenda(CreateVendaDto dto)
+        public async Task<Dictionary<bool, string>> RegistraVendaAsync(CreateVendaDto dto)
         {
-            Dictionary<bool, string> mensagem = new Dictionary<bool, string>();
+            var mensagem = new Dictionary<bool, string>();
 
             var cliente = _context.Clientes.Find(dto.ClienteId);
             if (cliente == null)
             {
                 mensagem.Add(false, "Cliente não encontrado!");
-
                 return mensagem;
             }
 
@@ -34,7 +35,7 @@ namespace VisionShopAPI.Services
                 var oculos = _context.Oculos.Find(item.OculosId);
                 if (oculos == null || oculos.Estoque < item.Quantidade)
                 {
-                    mensagem.Add(false, "Óculos não encontrado ou não há estoque!");
+                    mensagem.Add(false, $"Óculos (ID: {item.OculosId}) não encontrado ou estoque insuficiente!");
                     return mensagem;
                 }
             }
@@ -51,17 +52,30 @@ namespace VisionShopAPI.Services
                 }).ToList()
             };
 
+            // Registra saída de estoque para cada item vendido
             foreach (var item in venda.Itens)
             {
-                var oculos = _context.Oculos.Find(item.OculosId);
-                oculos.Estoque -= item.Quantidade;
+                try
+                {
+                    await _movimentacaoEstoqueService.CriarMovimentacao(new CreateMovimentacaoEstoqueDto
+                    {
+                        OculosId = item.OculosId,
+                        Quantidade = item.Quantidade,
+                        TipoMovimentacao = "Saída",
+                        Observacao = $"Venda ID: {venda.Id}"
+                    });
+                }
+                catch (Exception ex)
+                {
+                    mensagem.Add(false, $"Erro ao registrar movimentação para Óculos (ID: {item.OculosId}): {ex.Message}");
+                    return mensagem;
+                }
             }
 
-            _context.Vendas.Add(venda);
-            _context.SaveChanges();
+            await _context.Vendas.AddAsync(venda);
+            await _context.SaveChangesAsync();
 
             mensagem.Add(true, "Venda registrada com sucesso.");
-
             return mensagem;
         }
 
